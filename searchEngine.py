@@ -59,15 +59,15 @@ class SearchEngine:
         #Perform search
         for path, files in self.file_index:
             for file in files:
-                self.records +=1
+                self.records +=1 #Increment value for every record searched
                 #Search options: Contains, Starts with, and Ends with
                 if( values['CONTAINS'] and term.lower() in file.lower() or
                     values['STARTSWITH'] and file.lower().startswith(term.lower()) or
                     values['ENDSWITH'] and file.lower().endswith(term.lower())):
 
-                    result = path.replace('\\','/') + '/' + file
+                    result = path.replace('\\','/') + '/' + file #Replace back slash with forward slashes
                     self.results.append(result)
-                    self.matches +=1
+                    self.matches +=1 #Increment match value
                 else:
                     continue
 
@@ -76,42 +76,23 @@ class SearchEngine:
             for row in self.results:
                 f.write(row +'\n')
 
-def test1():
-    s = SearchEngine()
-    s.create_new_index('F:/')
-    s.search('python')
-
-    print()
-    print('>> There were {:,d} matches out of {:,d} records searched.'.format(s.matches, s.records))
-    print()
-    print('>> This query produced the following matches: \n')
-    for match in s.results:
-        print(match)
-
-def test2():
-    g = Gui()
-    while True:
-        event, values = g.window.Read()
-        print(event, values)
-
 def main():
     g = Gui()
     s = SearchEngine()
-    s.load_existing_file()
+    s.load_existing_file() #Load existing file, if available, upon starting program
 
     while True:
         event, values = g.window.Read()
 
         if event is None:
             break
-        if event == 'INDEX':
+        if event == 'INDEX': #If Re-Index button is clicked
             s.create_new_index(values)
             print()
             print('>> New Index has been created')
             print()
-        if event == 'SEARCH':
+        if event == 'SEARCH': #If Search button is clicked
             s.search(values)
-
             print()
             for result in s.results:
                 print(result)
